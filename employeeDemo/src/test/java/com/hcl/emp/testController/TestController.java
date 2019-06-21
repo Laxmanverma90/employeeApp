@@ -19,23 +19,14 @@ import com.hcl.emp.service.EmployeeServicedImpl;
 public class TestController {
 	
 	@Mock
-	private EmployeeRepository empRepository;
+	private EmployeeServicedImpl empRepositoryImpl;
 	
 	@InjectMocks
 	private EmployeeController empController;
-	
-	@Mock
-	private Employee employee;
-	
-	@Mock
-	private EmployeeBean empBean;
-	
-	@Test
-	public void createEmployee() {
-		String actualMessage = "Employee created successfully";
-		Mockito.when(empRepository.save(Mockito.anyObject())).thenReturn(Mockito.anyString());
-		String expectedMessage=empController.createEmployee(empBean);
-		assertEquals(actualMessage, expectedMessage);
-	}
 
+	@Test
+	public void testCreateUser() {
+		EmployeeBean empBean = new EmployeeBean(1, "Laxman", 26, "Dev", "IT", "laxman", "9045678990", "Blore", "HCL Blore"); 
+		
+	}
 }

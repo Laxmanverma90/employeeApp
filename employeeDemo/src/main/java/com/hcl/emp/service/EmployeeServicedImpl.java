@@ -1,9 +1,13 @@
 package com.hcl.emp.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,8 @@ import com.hcl.emp.repository.EmployeeRepository;
 @Service
 public class EmployeeServicedImpl implements EmployeeService {
 	
+	private static final Logger logger = LogManager.getLogger(EmployeeServicedImpl.class);
+	
 	@Autowired
 	private EmployeeRepository empRepo;
 	
@@ -27,6 +33,8 @@ public class EmployeeServicedImpl implements EmployeeService {
 	 */
 	@Override
 	public String createEmployee(EmployeeBean employeeBean) {
+		
+		logger.info("EmployeeBean :: started");
 		String message = null;
 		org.modelmapper.ModelMapper mapper = new org.modelmapper.ModelMapper();
 		Employee employee = mapper.map(employeeBean, Employee.class);
@@ -35,6 +43,7 @@ public class EmployeeServicedImpl implements EmployeeService {
 		} else {
 			message = "Failed to create Employee";
 		}
+		logger.info("EmployeeBean :: end");
 		return message;
 	}
 	
@@ -42,16 +51,20 @@ public class EmployeeServicedImpl implements EmployeeService {
 	 * return Object
 	 */
 	@Override
-	public Object getAllEmployee() {
-		Object returnObj = null;
-		List<Employee> empList = null;
-		empList = empRepo.findAll();
-		if(empList != null) {
-			returnObj = empList;
-		} else {
-			returnObj = "Record doesn't exist";
+	public List<EmployeeBean> getAllEmployee() {
+		EmployeeBean empBean = new EmployeeBean();
+		List<EmployeeBean> empBeanList = new ArrayList<>();
+		List<Employee> empList = new ArrayList<>();
+		try {
+			empList = empRepo.findAll();
+			for(int i=0; i<empList.size(); i++) {
+				BeanUtils.copyProperties(empBean, empList.get(i));
+				empBeanList.add(empBean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return returnObj;
+		return empBeanList;
 	}
 
 	/**

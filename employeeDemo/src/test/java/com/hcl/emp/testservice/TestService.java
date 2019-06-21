@@ -33,6 +33,8 @@ public class TestService {
 
 	@Mock
 	Employee employee;
+	
+	
 
 	@Mock
 	private EmployeeRepository empRepo;
@@ -61,37 +63,18 @@ public class TestService {
 	}
 
 	@Test
-	public void deleteEmployee() {
-		Employee employee = new Employee(1, "Laxman", 20, "SE", "IT", "Shrath@hcl.com", "909084857", "Blore", "Donahalli");
-		String expectedMessage = "deleted Successfully";
-//		Mockito.when(empRepo.deleteById(employee.getEmpId())).thenReturn(employee);
-//		Mockito.when(empRepo.deleteById(1L)).thenReturn(employee);
-		String actualMessage = employeeService.deleteEmployee(employee.getEmpId());
-		assertEquals(actualMessage, expectedMessage);
+	public void getEmployeeId()	{
+		long id=(long) 12345;
+		Employee employee =  new Employee();
+		employee.setEmpId(id);
+		Mockito.when(empRepo.getOne(Mockito.anyLong())).thenReturn(employee);
+		EmployeeBean empBean = (EmployeeBean) employeeService.getEmployeById(employee.getEmpId());
+		assertEquals(12345L, empBean.getEmpId());
 	}
 	
-	
-	@Test
-	public void getEmployeeId()
-	{
-		/*
-		 * Optional<Employee> employee = new Employee(); EmployeeBean empBean = new
-		 * EmployeeBean(); Mockito.when(empRepo.findById((long)
-		 * Mockito.anyInt())).thenReturn(empBean); Object actualEmpList =
-		 * employeeService.getEmployeById(empBean.getEmpId());
-		 * assertEquals(expectedEmpList, actualEmpList);
-		 */
-		Employee employee = new Employee(1, "Laxman", 20, "SE", "IT", "Shrath@hcl.com", "909084857", "Blore", "Donahalli");
-		
-		Mockito.when(empRepo.getOne(1L)).thenReturn(employee);
-		
-		EmployeeBean empBean = (EmployeeBean) employeeService.getEmployeById(1L);
-		
-		org.modelmapper.ModelMapper mapper = new org.modelmapper.ModelMapper();
-		Employee emp = mapper.map(empBean, Employee.class);
-		
-		assertEquals(employee, emp);
-		
-		
-	}
+//	@Test
+//	public void testDeletById() {
+//		EmployeeBean emBean = new EmployeeBean(12L, "Amit", 20, "Manager", "Marketing", "amit@hcl.com", "907890909", "Blore", "Blore");
+//		Mockito.when(empRepo.)
+//	}
 }
